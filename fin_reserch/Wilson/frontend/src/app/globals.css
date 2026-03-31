@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Emergent Design Tokens ────────────────────────────── */
+:root {
+  --em-bg: #0b1120;
+  --em-bg-elevated: #0f1729;
+  --em-bg-card: #162036;
+  --em-bg-card-hover: #1c2a45;
+  --em-border: #243352;
+  --em-border-subtle: #1a2740;
+  --em-text: #e8edf5;
+  --em-text-muted: #8e9bbc;
+  --em-text-subtle: #5a6a8a;
+  --em-blue: #4f8ff7;
+  --em-purple: #9b6dff;
+  --em-cyan: #22d3ee;
+  --em-green: #34d399;
+  --em-orange: #fb923c;
+  --em-rose: #fb7185;
+  --em-yellow: #fbbf24;
+  --em-gradient: linear-gradient(135deg, #4f8ff7 0%, #9b6dff 50%, #22d3ee 100%);
+  --em-radius: 14px;
+  --em-radius-lg: 20px;
+  --em-radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; color-scheme: dark; }
+
+body {
+  background: var(--em-bg);
+  color: var(--em-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--em-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--em-text-subtle); }
+
+/* ── Gradient Text ─────────────────────────────────────── */
+.em-gradient-text {
+  background: var(--em-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Solid Card (no glass, no transparency) ────────────── */
+.em-card {
+  background: var(--em-bg-card);
+  border: 1px solid var(--em-border-subtle);
+  border-radius: var(--em-radius);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.em-card:hover {
+  background: var(--em-bg-card-hover);
+  border-color: var(--em-border);
+  transform: translateY(-2px);
+}
+
+/* ── Badge ─────────────────────────────────────────────── */
+.em-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #1c2a4a;
+  border: 1px solid #2a3d66;
+  color: var(--em-blue);
+}
+
+/* ── Simple Animations (lightweight) ──────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInFast {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out both;
+}
+
+.animate-fade-in-fast {
+  animation: fadeInFast 0.22s ease-out both;
+}
+
+.em-reveal-up {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-modal-pop {
+  animation: modalPop 0.25s ease-out both;
+}
+
+/* ── Typing Indicator ──────────────────────────────────── */
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--em-blue);
+  animation: typingDot 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Responsive utilities ──────────────────────────────── */
+@media (max-width: 640px) {
+  html { font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
