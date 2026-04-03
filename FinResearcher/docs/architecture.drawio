@@ -1,0 +1,286 @@
+<mxfile host="app.diagrams.net" modified="2026-04-01T00:00:00.000Z" agent="FinResearcher" version="21.0.0" type="device">
+  <!-- PAGE 1: High-Level Design (HLD) -->
+  <diagram id="hld" name="HLD - High Level Design">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title1" value="FinResearcher — High Level Design (HLD)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=18;fontStyle=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+        <!-- User -->
+        <mxCell id="user" value="User / Browser" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- Presentation Layer -->
+        <mxCell id="pres" value="Presentation Layer&#xa;─────────────────&#xa;Streamlit Dashboard&#xa;(5 tabs: Overview, Compare,&#xa;Predict, Backtest, Research)&#xa;&#xa;FastAPI REST API&#xa;(/predict, /compare, /backtest)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="180" y="140" width="240" height="180" as="geometry" />
+        </mxCell>
+        <!-- Service Layer -->
+        <mxCell id="svc" value="Service Layer&#xa;─────────────────&#xa;PredictionService&#xa;EvaluationService&#xa;BacktestService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="500" y="140" width="200" height="180" as="geometry" />
+        </mxCell>
+        <!-- Model Layer -->
+        <mxCell id="mdl" value="Model Layer (ML)&#xa;─────────────────&#xa;ModelFactory&#xa;LSTM | GRU | BiLSTM&#xa;CNN-LSTM | Attention-LSTM&#xa;Transformer | Ensemble" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="780" y="140" width="220" height="180" as="geometry" />
+        </mxCell>
+        <!-- Data Layer -->
+        <mxCell id="dat" value="Data Layer&#xa;─────────────────&#xa;DataFetcher (yfinance)&#xa;FeatureEngineer (SMA, RSI, MACD, BB)&#xa;DataPreprocessor (scale, split, seq)&#xa;KafkaProducer (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="400" width="340" height="150" as="geometry" />
+        </mxCell>
+        <!-- External -->
+        <mxCell id="ext" value="External APIs&#xa;─────────────────&#xa;Yahoo Finance&#xa;Apache Kafka (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="400" width="200" height="150" as="geometry" />
+        </mxCell>
+        <!-- Arrows -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="user" target="pres" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="pres" target="svc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="svc" target="mdl" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="svc" target="dat" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="dat" target="ext" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <!-- PAGE 2: Low-Level Design (LLD) -->
+  <diagram id="lld" name="LLD - Low Level Design">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t2" value="FinResearcher — Low Level Design (LLD)" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+        <!-- DataFetcher -->
+        <mxCell id="df" value="DataFetcher&#xa;───────────&#xa;+fetch(symbol, period): DataFrame&#xa;+fetch_range(symbol, start, end): DataFrame&#xa;+get_info(symbol): dict" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="60" width="280" height="90" as="geometry" />
+        </mxCell>
+        <!-- FeatureEngineer -->
+        <mxCell id="fe" value="FeatureEngineer&#xa;───────────&#xa;+add_all_features(df): DataFrame&#xa;-_compute_rsi(series, period): Series" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="170" width="280" height="80" as="geometry" />
+        </mxCell>
+        <!-- DataPreprocessor -->
+        <mxCell id="dp" value="DataPreprocessor&#xa;───────────&#xa;+scale(df, target_col): (ndarray, ndarray)&#xa;+create_sequences(features, target, lookback): (X, y)&#xa;+split(X, y, train_ratio): (Xtr, Xte, ytr, yte)&#xa;+inverse_transform_target(scaled): ndarray" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="270" width="320" height="100" as="geometry" />
+        </mxCell>
+        <!-- BaseModel -->
+        <mxCell id="bm" value="«abstract» BaseModel&#xa;───────────&#xa;+name: str&#xa;+build(input_shape): void&#xa;+train(X, y, epochs, batch, val): dict&#xa;+predict(X): ndarray&#xa;+summary(): str" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;align=left;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="60" width="260" height="120" as="geometry" />
+        </mxCell>
+        <!-- Concrete Models -->
+        <mxCell id="m1" value="LSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="220" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="GRUModel ★" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="220" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="BiLSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="220" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" value="CNNLSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="260" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" value="AttentionLSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="490" y="260" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" value="TransformerModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="260" width="110" height="30" as="geometry" />
+        </mxCell>
+        <!-- Inheritance arrows -->
+        <mxCell id="i1" style="endArrow=block;endFill=0;dashed=1;" edge="1" source="m1" target="bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i2" style="endArrow=block;endFill=0;dashed=1;" edge="1" source="m2" target="bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i3" style="endArrow=block;endFill=0;dashed=1;" edge="1" source="m3" target="bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- ModelFactory -->
+        <mxCell id="mf" value="ModelFactory&#xa;───────────&#xa;+create(name): BaseModel&#xa;+list_models(): list&#xa;+create_all(): list" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="770" y="60" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- EnsembleModel -->
+        <mxCell id="em" value="EnsembleModel&#xa;───────────&#xa;+from_ranked(models_rmse): EnsembleModel&#xa;+add_model(model, weight): void" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="770" y="160" width="260" height="70" as="geometry" />
+        </mxCell>
+        <!-- PredictionService -->
+        <mxCell id="ps" value="PredictionService&#xa;───────────&#xa;+prepare_data(symbol, period): (Xtr, Xte, ytr, yte)&#xa;+train_and_predict(model, X, y): ndarray&#xa;+predict_next_day(symbol, model_name): Prediction" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="420" width="340" height="90" as="geometry" />
+        </mxCell>
+        <!-- EvaluationService -->
+        <mxCell id="es" value="EvaluationService&#xa;───────────&#xa;+compare_all_models(symbol, period, models): ComparisonReport" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="420" width="340" height="60" as="geometry" />
+        </mxCell>
+        <!-- BacktestService -->
+        <mxCell id="bs" value="BacktestService&#xa;───────────&#xa;+run(actual, predicted, capital): BacktestResult" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="420" width="280" height="60" as="geometry" />
+        </mxCell>
+        <!-- Domain -->
+        <mxCell id="d1" value="Prediction&#xa;symbol, model_name,&#xa;predicted_price,&#xa;prediction_date, confidence" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="550" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" value="ModelResult&#xa;model_name, mae, mse,&#xa;rmse, mape, r2,&#xa;directional_accuracy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="220" y="550" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" value="ComparisonReport&#xa;symbol, period,&#xa;results[], best_model,&#xa;ensemble_result" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="550" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" value="BacktestResult&#xa;initial_capital, final_capital,&#xa;sharpe, max_drawdown,&#xa;equity_curve[]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="550" width="200" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <!-- PAGE 3: UML Class Diagram -->
+  <diagram id="uml" name="UML - Class Diagram">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t3" value="FinResearcher — UML Class Diagram" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+        <!-- BaseModel UML -->
+        <mxCell id="uml_bm" value="&lt;&lt;abstract&gt;&gt;&#xa;BaseModel&#xa;──────────&#xa;- name: str&#xa;- _model: Model&#xa;- _history: dict&#xa;──────────&#xa;+ build(input_shape): void&#xa;+ train(X, y, ...): dict&#xa;+ predict(X): ndarray&#xa;+ summary(): str" style="shape=mxgraph.uml.classHorizontal;align=left;spacingLeft=4;fontSize=10;fontStyle=0;fillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="420" y="60" width="200" height="190" as="geometry" />
+        </mxCell>
+        <!-- ModelFactory UML -->
+        <mxCell id="uml_mf" value="ModelFactory&#xa;──────────&#xa;- _REGISTRY: Dict&#xa;──────────&#xa;+ create(name): BaseModel&#xa;+ list_models(): list&#xa;+ create_all(): list" style="shape=mxgraph.uml.classHorizontal;align=left;spacingLeft=4;fontSize=10;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="700" y="80" width="200" height="130" as="geometry" />
+        </mxCell>
+        <!-- Config UML -->
+        <mxCell id="uml_cfg" value="&lt;&lt;singleton&gt;&gt;&#xa;Config&#xa;──────────&#xa;- _instance: Config&#xa;+ model: ModelConfig&#xa;+ data: DataConfig&#xa;+ kafka: KafkaConfig&#xa;+ api: APIConfig" style="shape=mxgraph.uml.classHorizontal;align=left;spacingLeft=4;fontSize=10;fillColor=#e1d5e7;" vertex="1" parent="1">
+          <mxGeometry x="50" y="60" width="200" height="150" as="geometry" />
+        </mxCell>
+        <!-- Concrete model boxes -->
+        <mxCell id="uml_lstm" value="LSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="310" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_gru" value="GRUModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="310" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_bi" value="BiLSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="310" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_cnn" value="CNNLSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="360" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_att" value="AttentionLSTMModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="360" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_tr" value="TransformerModel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="570" y="360" width="120" height="30" as="geometry" />
+        </mxCell>
+        <!-- Generalization arrows -->
+        <mxCell id="g1" style="endArrow=block;endFill=0;" edge="1" source="uml_lstm" target="uml_bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g2" style="endArrow=block;endFill=0;" edge="1" source="uml_gru" target="uml_bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g3" style="endArrow=block;endFill=0;" edge="1" source="uml_bi" target="uml_bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Creates dependency -->
+        <mxCell id="dep1" value="creates" style="endArrow=open;dashed=1;" edge="1" source="uml_mf" target="uml_bm" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Services -->
+        <mxCell id="uml_ps" value="PredictionService&#xa;──────────&#xa;+ prepare_data(): tuple&#xa;+ train_and_predict(): ndarray&#xa;+ predict_next_day(): Prediction" style="shape=mxgraph.uml.classHorizontal;align=left;spacingLeft=4;fontSize=10;fillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="50" y="450" width="250" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_es" value="EvaluationService&#xa;──────────&#xa;+ compare_all_models(): ComparisonReport" style="shape=mxgraph.uml.classHorizontal;align=left;spacingLeft=4;fontSize=10;fillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="350" y="450" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uml_bs" value="BacktestService&#xa;──────────&#xa;+ run(actual, predicted, capital): BacktestResult" style="shape=mxgraph.uml.classHorizontal;align=left;spacingLeft=4;fontSize=10;fillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="680" y="450" width="280" height="70" as="geometry" />
+        </mxCell>
+        <!-- Usage arrows -->
+        <mxCell id="u1" value="uses" style="endArrow=open;dashed=1;" edge="1" source="uml_es" target="uml_ps" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u2" value="uses" style="endArrow=open;dashed=1;" edge="1" source="uml_es" target="uml_mf" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <!-- PAGE 4: Execution Flow Diagram -->
+  <diagram id="flow" name="Execution Flow">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t4" value="FinResearcher — Execution Flow" style="text;html=1;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+        <!-- Start -->
+        <mxCell id="s1" value="User opens&#xa;Streamlit UI" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="460" y="60" width="120" height="50" as="geometry" />
+        </mxCell>
+        <!-- Steps -->
+        <mxCell id="f1" value="1. Enter Stock Symbol&#xa;(e.g., AAPL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="430" y="140" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f2" value="2. DataFetcher.fetch()&#xa;→ yfinance API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1">
+          <mxGeometry x="430" y="220" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f3" value="3. FeatureEngineer&#xa;→ SMA, EMA, RSI, MACD, BB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1">
+          <mxGeometry x="430" y="300" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f4" value="4. DataPreprocessor&#xa;→ Scale, Sequence, Split" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1">
+          <mxGeometry x="430" y="380" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Decision -->
+        <mxCell id="dec" value="Mode?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;" vertex="1" parent="1">
+          <mxGeometry x="480" y="460" width="80" height="60" as="geometry" />
+        </mxCell>
+        <!-- Compare branch -->
+        <mxCell id="f5a" value="5a. ModelFactory.create_all()&#xa;→ Train 6 models" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="200" y="550" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f6a" value="6a. compute_metrics()&#xa;→ Rank by RMSE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="200" y="620" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f7a" value="7a. EnsembleModel&#xa;→ Weighted combination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="200" y="690" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- Predict branch -->
+        <mxCell id="f5b" value="5b. ModelFactory.create(name)&#xa;→ Build, Train" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="640" y="550" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f6b" value="6b. predict(last_60_days)&#xa;→ Next day price" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="640" y="620" width="200" height="50" as="geometry" />
+        </mxCell>
+        <!-- End -->
+        <mxCell id="end" value="Display Results&#xa;(Charts, Tables,&#xa;Equity Curves)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="440" y="770" width="160" height="60" as="geometry" />
+        </mxCell>
+        <!-- Arrows -->
+        <mxCell id="a1" style="" edge="1" source="s1" target="f1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a2" style="" edge="1" source="f1" target="f2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a3" style="" edge="1" source="f2" target="f3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a4" style="" edge="1" source="f3" target="f4" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a5" style="" edge="1" source="f4" target="dec" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a6" value="Compare" style="" edge="1" source="dec" target="f5a" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a7" value="Predict" style="" edge="1" source="dec" target="f5b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a8" style="" edge="1" source="f5a" target="f6a" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a9" style="" edge="1" source="f6a" target="f7a" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a10" style="" edge="1" source="f5b" target="f6b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a11" style="" edge="1" source="f7a" target="end" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a12" style="" edge="1" source="f6b" target="end" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
